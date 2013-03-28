@@ -1,0 +1,14 @@
+| *Setting*      | *Value* 			    		| *Value* | *Value* |*Value* |
+| Documentation  | Marconi - Queue Test Suite	|		  |         |        |
+| Library        | httpfnlib.py           	    |		  |         |        |
+| Test Template  | executetests	         		|		  |         |        |
+| Variables      | getdata.py                   |         |         |        |
+| Force Tags     | QUEUE                        |         |         |        |
+
+| *Test Case*           | *Action*              | *Argument*                   |
+| 1: PUT QUEUE          | [DOCUMENTATION]       | Creates a Queue              |
+|                       | ${API_TEST_DATA[0]}   |                              |
+|                       | [Tags]				| INSERT_QUEUE                 |
+| 2: GET QUEUE          | [DOCUMENTATION]       | Verifies the Queue from TC1  |
+|                       | ${API_TEST_DATA[1]}   |                              |
+|                       | [Tags]				| GET_QUEUE                    |

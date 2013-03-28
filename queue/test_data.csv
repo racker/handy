@@ -1,0 +1,20 @@
+TestID|httpverb|url|header|body|params|expectedRC|expectedResponseBody
+1|PUT     |http://<SERVER>/v1/1/queues/zz111add7||{"messages":{"ttl": 86400}}||201|
+2|GET     |http://<SERVER>/v1/1/queues/zz111add7||||200|{"ttl": 86400}
+3|PUT     |http://<SERVER>/v1/1/queues/zz111add7||{"messages": {"ttl": 86400}}||201|
+4|GET     |http://<SERVER>/v1/1/queues/zz111add7||||200|{"ttl": 86400}
+5|PUT     |http://<SERVER>/v1/1/queues/zz111add7||{"messages": {"ttl": 86400}}||204|
+6|GET     |http://<SERVER>/v1/1/queues/zz111add7||||200|{"ttl": 86400}
+7|PUT     |http://<SERVER>/v1/1/queues/zz111add8||||400|{"title": "Bad request","description": "Missing queue metadata."}
+8|PUT     |http://<SERVER>/v1/1/queues/zz111add56|{"HANDYFLAG" : "invalidauthtokenheader"}|{"messages": {"ttl": 86400}}||401|
+9|PUT     |http://<SERVER>/v1/1/queues/zz111add56|{"HANDYFLAG" : "missingheaderfields"}|{"messages": {"ttl": 86400}}||400|
+10|PUT    |http://<SERVER>/v1/1/queues/zz111add79||{"_TOPLEVEL": {"ttl": 86400}}||400|
+11|PUT    |http://<SERVER>/v1/1/queues/zz111add79|{"HANDYFLAG" : "plaintextinheader"}|{"TOPLEVEL": {"ttl": 86400}}||400|
+12|PUT    |http://<SERVER>/v1/1/queues/zz111add79|{"HANDYFLAG" : "asteriskinheader"}|{"TOPLEVEL": {"ttl": 86400}}||200|
+13|PUT    |http://<SERVER>/v1/1/queues/汉字/漢字||{"messages": {"ttl": 86400}}||201|
+14|PUT    |http://<SERVER>/v1/1/queues/zz111add7||{"汉字": {"ttl": 86400}}||201|
+15|DELETE |http://<SERVER>/v1/1/queues/zz111add7||{"messages": {"ttl": 86400}}||204|
+16|PUT    |http://<SERVER>/v1/1/queues/zz111add87||{"HANDYFLAG": "metadatasize4096"}||201|
+17|PUT    |http://<SERVER>/v1/1/queues/zz111add87||{"HANDYFLAG": "metadatasize4097"}||201|
+18|PUT    |http://<SERVER>/v1/1/queues/zz111add87||{"HANDYFLAG": "metadatasize4095"}||201|
+19|PUT    |http://<SERVER>/v1/1/queues/<longqueuename>||{"messages":{"ttl": 86400}}||400|
