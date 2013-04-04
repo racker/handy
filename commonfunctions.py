@@ -12,7 +12,7 @@ UUID = str(uuid.uuid1())
 def getkeystonetoken():
     """Gets Keystone Auth token"""
 
-    req_json = '{"auth":{"passwordCredentials":{"username":"marconidev","password":"2AITRDkvI2nt"}}}'
+    req_json = '{"auth":{"passwordCredentials":{"username":"","password":""}}}'
     header = '{"Host": "identity.api.rackspacecloud.com","Content-Type": "application/json","Accept": "application/json"}'
     url = AUTH_URL
     response = httpfnlib.httppost(url = url,header = header, body = req_json)
