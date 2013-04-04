@@ -11,6 +11,7 @@ import json
 
 def httpget(url, header = '', param = ''):
     """Function to perform http GET"""
+    print("In GET",url)
     if header:
     #@todo2
         header = json.loads(header)
@@ -32,6 +33,8 @@ def httppost(url, header = '', body = '', param = ''):
     if header:
     #@todo2
         header = json.loads(header)
+    body = str(body)
+    body = body.replace("'",'"')
     try:
         response = requests.post(url, headers = header, data = body,
                                  params = param)
@@ -117,6 +120,10 @@ def executetests(row):
         print("ExpectedRC: {}".format(expectedRC))
         print("expectedresponsebody: {}".format(expectedresponsebody))
         assert testresultflag,"Actual Response does not match the Expected"
+    else:
+        #print response
+        return response.headers, response.text
+
 
 
 def verifyresponse(response, expectedRC, expectedresponsebody):

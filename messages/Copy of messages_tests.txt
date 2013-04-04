@@ -1,0 +1,25 @@
+| *Setting*      | *Value* 			    		|
+| Documentation  | Marconi - Queue Test Suite	|
+| Library        | httpfnlib.py           	    |
+| Library        | commonfunctions.py           |
+| Library        | Collections                  |
+| Variables      | getdata.py                   |
+| Force Tags     | MESSAGES                     |
+
+
+| *Test Case*           | *Action*            | *Argument*      | *Argument*                  | *Argument*    |
+| 1: POST MESSAGE       | [DOCUMENTATION]     |                 | Post single message         |               |
+|                       | [Tags]			  | INSERT_MESSAGE  |                             |               |
+|                       | ${reqparam}=        | Create Dictionary | messagecount              | ${1}          |
+|                       | ${msgbody}=         | dummygetmessagebody | ${reqparam}             |               |
+|                       | Remove From Dictionary   | ${API_TEST_DATA[0]} | body               |               |
+|                       | Set To Dictionary   | ${API_TEST_DATA[0]} | body                    | ${msgbody}    |
+|                       | Log                 | ${API_TEST_DATA[0]['body']} |                 |               |
+|                       | Log                 | ${API_TEST_DATA[0]} |                         |               |
+|                       | @{postresponse}=    | executetests    | ${API_TEST_DATA[0]}         |               |
+|                       | @{message_id}=      | extractmsgid    | ${postresponse[0]}          |               |
+|                       | @{msgurl}=          | createurl       | ${API_TEST_DATA[0]["url"]}  | @{message_id} |
+|                       | :FOR                | ${url}          | IN                          | @{msgurl}     |
+|                       |                     | ${API_TEST_DATA[1]["url"]}=  | Set Variable   | ${url}        |
+|                       |                     | @{getresponse}= | executetests                | ${API_TEST_DATA[1]} |
+|                       |                     | verifymetadata  | ${getresponse[1]}           | ${API_TEST_DATA[0]["body"]} |

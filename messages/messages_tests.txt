@@ -1,0 +1,48 @@
+| *Setting*      | *Value* 			    		|
+| Documentation  | Marconi - Queue Test Suite	|
+| Library        | httpfnlib.py           	    |
+| Library        | commonfunctions.py           |
+| Library        | Collections                  |
+| Variables      | getdata.py                   |
+| Force Tags     | MESSAGES                     |
+
+
+| *Test Case*           | *Action*            | *Argument*      | *Argument*                  | *Argument*    | # Comment
+| 1:POST SINGLE MESSAGE | [DOCUMENTATION]     |                 | Post single message         |               | #TEST CASE 1 - POST SINGLE MESSAGE
+|                       | [Tags]			  | INSERT_MESSAGE  |                             |               |
+|                       | ${reqparam}=        | Create Dictionary | messagecount              | ${1}          | # Specify count of messages to be posted
+|                       | ${msgbody}=         | dummygetmessagebody | ${reqparam}             |               | # Get the message body to post
+|                       | Set To Dictionary   | ${API_TEST_DATA[0]} | body                    | ${msgbody}    | # Set the POST body
+|                       | @{postresponse}=    | executetests    | ${API_TEST_DATA[0]}         |               | # postresponse = [httpheaders, httpresponsebody] |
+|                       | @{message_id}=      | extractmsgid    | ${postresponse[0]}          |               | # extract message ids returned in the header
+|                       | @{msgurl}=          | createurl       | ${API_TEST_DATA[1]["url"]}  | @{message_id} | # build url to GET the message that was posted
+|                       | :FOR                | ${url}          | IN                          | @{msgurl}     | # Loop to perform GET messages
+|                       |                     | Set To Dictionary   | ${API_TEST_DATA[1]} | url   | ${url}    |
+|                       |                     | @{getresponse}= | executetests                | ${API_TEST_DATA[1]} |
+|                       |                     | verifymetadata  | ${getresponse[1]}           | ${API_TEST_DATA[0]["body"]} | # Compare message metadata in GET response with the posted body
+|                       |
+| 2:POST MULTIPLE MESSAGES | [DOCUMENTATION]  |                 | Post 3 messages             |               | #TEST CASE 2 - POST MULTIPLE MESSAGES
+|                       | [Tags]			  | INSERT_MESSAGE  |                             |               |
+|                       | ${reqparam}=        | Create Dictionary | messagecount              | ${3}          | # Specify count of messages to be posted
+|                       | ${msgbody}=         | dummygetmessagebody | ${reqparam}             |               | # Get the message body to post
+|                       | Set To Dictionary   | ${API_TEST_DATA[2]} | body                    | ${msgbody}    | # Set the POST body
+|                       | @{postresponse}=    | executetests    | ${API_TEST_DATA[2]}         |               | # postresponse = [httpheaders, httpresponsebody]
+|                       | @{message_id}=      | extractmsgid    | ${postresponse[0]}          |               | # extract message ids returned in the header
+|                       | @{msgurl}=          | createurl       | ${API_TEST_DATA[3]["url"]}  | @{message_id} | # build url to GET specific messages that were posted
+|                       | :FOR                | ${url}          | IN                          | @{msgurl}     | # Loop to perform GET messages
+|                       |                     | Set To Dictionary   | ${API_TEST_DATA[3]} | url   | ${url}    |
+|                       |                     | @{getresponse}= | executetests                | ${API_TEST_DATA[3]} |
+|                       |                     | verifymetadata  | ${getresponse[1]}           | ${API_TEST_DATA[2]["body"]} | #Compare message metadata in GET response with the posted body
+|                       |
+| 3:GET MESSAGES-no params  | [DOCUMENTATION] | Get message with no params |                         | # TEST CASE 3 - GET MESSAGE WITH NO PARAMS
+|                       | @{getresponse}=     | executetests               | ${API_TEST_DATA[4]}     | # Get messages with no url params
+|                       | verifymsglength     | ${10}                      | ${getresponse[1]}       | # Verifies that number of messages returned is <= 10
+|                       | ${href}=            | gethref                    | ${getresponse[1]}       | # Retrieves href
+|                       | ${geturl}=          | createurlfromhref          | ${href}                 | # Creates the GET url for the next request from href
+|                       |
+| 4:GET MESSAGES-limit=5 | [DOCUMENTATION]    | Get message with no params |                         | # TEST CASE 4 - GET MESSAGE WITH limit = 5
+|                       | @{getresponse}=     | executetests               | ${API_TEST_DATA[5]}     | # Get messages with no url params
+|                       | verifymsglength     | ${5}                       | ${getresponse[1]}       | # Verifies that number of messages returned is <= 5
+| 5:GET MESSAGES-echo=False | [DOCUMENTATION] | Get message with no params |                         | # TEST CASE 5 - GET MESSAGE WITH echo=Flase
+|                       | @{getresponse}=     | executetests               | ${API_TEST_DATA[6]}     | # Get messages with no url params
+|                       | verifymsglength     | ${10}                      | ${getresponse[1]}       | # Verifies that number of messages returned is <= 5

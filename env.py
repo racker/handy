@@ -1,0 +1,9 @@
+#START ENVIRONMENT VARIABLES
+HOST = "marconi.test.com"
+USERAGENT = "useragent"
+AUTH_URL = "https://identity.api.rackspacecloud.com/v2.0/tokens"
+#BASE_URL = "http://166.78.150.92:8888/v1/1"
+#BASE_SERVER = "http://166.78.150.92:8888"
+BASE_URL = "http://166.78.143.130:80/v1/1"
+BASE_SERVER = "http://166.78.143.130:80"
+#END ENVIRONMENT VARIABLES

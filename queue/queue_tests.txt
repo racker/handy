@@ -1,79 +1,60 @@
-| *Setting*      | *Value* 			    		| *Value* | *Value* |*Value* |
-| Documentation  | Marconi - Queue Test Suite	|		  |         |        |
-| Library        | httpfnlib.py           	    |		  |         |        |
-| Test Template  | executetests	         		|		  |         |        |
-| Variables      | getdata.py                   |         |         |        |
-| Force Tags     | QUEUE                        |         |         |        |
+| *Setting*      | *Value* 			    		|
+| Documentation  | Marconi - Queue Test Suite	|
+| Library        | httpfnlib.py           	    |
+| Library        | commonfunctions.py           |
+| Variables      | getdata.py                   |
+| Force Tags     | QUEUE                        |
 
-| *Test Case*           | *Action*              | *Argument*                   |
-| 1: PUT QUEUE          | [DOCUMENTATION]       | Creates a Queue              |
-|                       | ${API_TEST_DATA[0]}   |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 2: GET QUEUE          | [DOCUMENTATION]       | Verifies the Queue from TC1  |
-|                       | ${API_TEST_DATA[1]}   |                              |
-|                       | [Tags]				| GET_QUEUE                    |
-| 3: PUT QUEUE          | [DOCUMENTATION]       | Verifies that queues are NOT |
-|                       | ...                   | case sensitive               |
-|                       | ${API_TEST_DATA[2]}   |                              |
-|                       | [Tags]	    	    | INSERT_QUEUE                 |
-| 4: GET QUEUE          | [DOCUMENTATION]       | Verifies the Queue from TC3  |
-|                       | ${API_TEST_DATA[3]}   |                              |
-|                       | [Tags]			    | GET_QUEUE                    |
-| 5: PUT QUEUE          | [DOCUMENTATION]       | Creates a Queue with the     |
-|                       | ...                   | same name as TC1             |
-|                       | ${API_TEST_DATA[4]}   |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 6: GET QUEUE          | [DOCUMENTATION]       | Verifies the Queue from TC1  |
-|                       | ${API_TEST_DATA[5]}   |                              |
-|                       | [Tags]				| GET_QUEUE                    |
-| 7: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with no request |
-|                       | ...                   | body                         |
-|                       | ${API_TEST_DATA[6]}   |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 8: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with invalid    |
-|                       | ...                   | Keystone Auth Token          |
-|                       | ${API_TEST_DATA[7]}   |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 9: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with missing    |
-|                       | ...                   | header field USERAGENT       |
-|                       | ${API_TEST_DATA[8]}   |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 10: PUT QUEUE         | [DOCUMENTATION]       | Verifies metadata toplevel   |
-|                       | ...                   | field do not start with _    |
-|                       | ${API_TEST_DATA[9]}   |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 11: PUT QUEUE         | [DOCUMENTATION]       | Header has Accept value that |
-|                       | ...                   | is not "application/json"    |
-|                       | ${API_TEST_DATA[10]}  |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 12: PUT QUEUE         | [DOCUMENTATION]       | Header has Accept            |
-|                       | ...                   | value = \*/\*                |
-|                       | ${API_TEST_DATA[11]}  |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 13: PUT QUEUE         | [DOCUMENTATION]       | Create queue with Non ASCII  |
-|                       | ...                   | characters in name           |
-|                       | ${API_TEST_DATA[12]}  |                              |
-|                       | [Tags]				| INSERT_QUEUE                 |
-| 14: PUT QUEUE         | [DOCUMENTATION]       | Create queue with Non ASCII  |
-|                       | ...                   | characters metadata          |
-|                       | ${API_TEST_DATA[13]}  |                              |
-|                       | [Tags]				| NOTIMP                       |
-| 15: DELETE QUEUE      | [DOCUMENTATION]       | Delete a  queue              |
-|                       | ${API_TEST_DATA[14]}  |                              |
-|                       | [Tags]				| NOTIMP                       |
-| 16: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |
-|                       | ...                   | size = 4KB                   |
-|                       | ${API_TEST_DATA[15]}  |                              |
-|                       | [Tags]				|                              |
-| 17: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |
-|                       | ...                   | size = 4KB + 1 byte          |
-|                       | ${API_TEST_DATA[16]}  |                              |
-|                       | [Tags]				|                              |
-| 18: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |
-|                       | ...                   | size = 4KB - 1 byte          |
-|                       | ${API_TEST_DATA[17]}  |                              |
-|                       | [Tags]				|                              |
-| 19: PUT QUEUE         | [DOCUMENTATION]       | Create queue with name       |
-|                       | ...                   | longer than 512 bytes        |
-|                       | ${API_TEST_DATA[18]}  |                              |
-|                       | [Tags]				|                              |
+| *Test Case*           | *Action*              | *Argument*                   | *Argument*          |
+| 1: PUT QUEUE          | [DOCUMENTATION]       | Creates, gets & verifies     |                     |
+|                       | ...                   | Queue                        |                     |
+|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[0]} |
+|                       | ${getresponse}=       | executetests                 | ${API_TEST_DATA[1]} |
+|                       | verifymetadata        | ${API_TEST_DATA[0]["body"]}  | ${getresponse}      |
+| 2: PUT QUEUE          | [DOCUMENTATION]       | Verifies that queue name     |                     |
+|                       | ...                   | are NOT case sensitive       |                     |
+|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[2]} |
+|                       | ${getresponse}=       | executetests                 | ${API_TEST_DATA[3]} |
+|                       | verifymetadata        | ${API_TEST_DATA[2]["body"]}  | ${getresponse}      |
+| 3: UPDATE QUEUE       | [DOCUMENTATION]       | Updates an existing queue    |                     |
+|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[4]} |
+|                       | ${getresponse}=       | executetests                 | ${API_TEST_DATA[5]} |
+|                       | verifymetadata        | ${API_TEST_DATA[4]["body"]}  | ${getresponse}      |
+| 4: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with no request |                     |
+|                       | ...                   | body                         |                     |
+|                       | executetests          | ${API_TEST_DATA[6]}          |                     |
+| 5: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with invalid    |                     |
+|                       | ...                   | Authtoken                    |                     |
+|                       | executetests          | ${API_TEST_DATA[7]}          |                     |
+| 6: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with missing    |                     |
+|                       | ...                   | header field USERAGENT       |                     |
+|                       | executetests          | ${API_TEST_DATA[8]}          |                     |
+| 7: PUT QUEUE          | [DOCUMENTATION]       | Verifies metadata toplevel   |                     |
+|                       | ...                   | field do not start with _    |                     |
+|                       | executetests          | ${API_TEST_DATA[9]}          |                     |
+| 8: PUT QUEUE          | [DOCUMENTATION]       | Header has Accept value that |                     |
+|                       | ...                   |  is not "application/json"   |                     |
+|                       | executetests          | ${API_TEST_DATA[10]}         |                     |
+| 9: PUT QUEUE          | [DOCUMENTATION]       | Header has Accept value that |                     |
+|                       | ...                   |  is     "\*/\*"              |                     |
+|                       | executetests          | ${API_TEST_DATA[11]}         |                     |
+| 10: PUT QUEUE         | [DOCUMENTATION]       | Create queue with Non ASCII  |                     |
+|                       | ...                   | characters in name           |                     |
+|                       | executetests          | ${API_TEST_DATA[12]}         |                     |
+| 11: PUT QUEUE         | [DOCUMENTATION]       | Create queue with Non ASCII  |                     |
+|                       | ...                   | characters in body           |                     |
+|                       | executetests          | ${API_TEST_DATA[13]}         |                     |
+| 12: DELETE QUEUE      | [DOCUMENTATION]       | Delete a  queue              |                     |
+|                       | executetests          | ${API_TEST_DATA[14]}         |                     |
+| 13: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |                     |
+|                       | ...                   | size = 4KB                   |                     |
+|                       | executetests          | ${API_TEST_DATA[15]}         |                     |
+| 14: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |                     |
+|                       | ...                   | size = 4KB + 1               |                     |
+|                       | executetests          | ${API_TEST_DATA[16]}         |                     |
+| 15: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |                     |
+|                       | ...                   | size = 4KB - 1               |                     |
+|                       | executetests          | ${API_TEST_DATA[17]}         |                     |
+| 16: PUT QUEUE         | [DOCUMENTATION]       | Create queue with name       |                     |
+|                       | ...                   | longer than 512 bytes        |                     |
+|                       | executetests          | ${API_TEST_DATA[18]}         |                     |
