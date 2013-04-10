@@ -59,3 +59,7 @@
 | 16: PUT QUEUE         | [DOCUMENTATION]       | Create queue with name       |                     |
 |                       | ...                   | longer than 512 bytes        |                     |
 |                       | executetests          | ${API_TEST_DATA[18]}         |                     |
+| 17: GET QUEUE STATS   | [DOCUMENTATION]       | Get Queue Stats              |                     |
+|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[0]} |
+|                       | @{getresponse}=       | executetests                 | ${API_TEST_DATA[20]} |
+|                       | verifyqueuestats      | @{getresponse}               |
