@@ -1,0 +1,18 @@
+| *Setting*      | *Value* 			    		| *Value*    |
+| Documentation  | Marconi - Message Test Suite	|
+| Library        | httpfnlib.py           	    |
+| Library        | commonfunctions.py           |
+| Library        | msgfnlib.py                  |
+| Library        | Collections                  |
+| Variables      | getdata.py                   |
+| Force Tags     | MESSAGES                     |
+
+| *Test Case*           | *Action*            | *Argument*      | *Argument*                  | *Argument*    | # Comment
+| 1:POST SINGLE MESSAGE | [DOCUMENTATION]     |                 | Post single message         |               | #TEST CASE 1 - POST SINGLE MESSAGE
+|                       | [Tags]			  | INSERT_MESSAGE  |                             |               |
+|                       | ${reqparam}=        | Create Dictionary | messagecount              | ${115}         | # test Setup- Specify count of messages to be posted
+|                       | ${msgbody}=         | dummygetmessagebody | ${reqparam}             |               | # test Setup- Get the message body to post
+|                       | Set To Dictionary   | ${API_TEST_DATA[1]} | body                    | ${msgbody}    | # test Setup -Set the POST body
+|                       | @{postresponse}=    | executetests    | ${API_TEST_DATA[1]}         |               | # postresponse = [httpheaders, httpresponsebody] |
+|                       | verifypostmsg       | ${postresponse[0]} | ${API_TEST_DATA[1]["body"]} |            | # GET the posted message & verify metadata
+|                       |

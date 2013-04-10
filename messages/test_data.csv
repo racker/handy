@@ -1,8 +1,7 @@
 TestID|httpverb|url|header|body|params|expectedRC|expectedResponseBody
-1|POST   |<BASE_URL>/queues/dz101add7/messages||||201|
-2|GET    |<BASE_URL>/queues/dz101add7/messages/||||200|
-3|POST   |<BASE_URL>/queues/dz101add7/messages||||201|
-4|GET    |<BASE_URL>/queues/dz101add7/messages/||||200|
-5|GET    |<BASE_URL>/queues/dz101add7/messages/||||200|
-6|GET    |<BASE_URL>/queues/dz101add7/messages?limit=5||||200|
-7|GET    |<BASE_URL>/queues/dz101add7/messages?limit=5&echo=False||||200|
+0|PUT     |<BASE_URL>/queues/fz101add7||{"messages":{"ttl": 86400}}||201|
+1|POST   |<BASE_URL>/queues/claimqueueadd7/messages||||201|
+2|POST   |<BASE_URL>/queues/fz101add7/messages||||201|
+3|GET    |<BASE_URL>/queues/fz101add7/messages/||||200|
+4|GET    |<BASE_URL>/queues/fz101add7/messages?limit=5||||200|
+5|GET    |<BASE_URL>/queues/fz101add7/messages?limit=5&echo=false||||200|

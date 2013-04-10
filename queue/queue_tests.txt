@@ -1,6 +1,7 @@
 | *Setting*      | *Value* 			    		|
 | Documentation  | Marconi - Queue Test Suite	|
 | Library        | httpfnlib.py           	    |
+| Library        | queuefnlib.py           	    |
 | Library        | commonfunctions.py           |
 | Variables      | getdata.py                   |
 | Force Tags     | QUEUE                        |

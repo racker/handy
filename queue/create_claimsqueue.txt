@@ -1,0 +1,13 @@
+| *Setting*      | *Value* 			    		|
+| Documentation  | Marconi - Queue Test Suite	|
+| Library        | httpfnlib.py           	    |
+| Library        | commonfunctions.py           |
+| Variables      | getdata.py                   |
+| Force Tags     | QUEUE                        |
+
+| *Test Case*           | *Action*              | *Argument*                   | *Argument*          |
+| 1: PUT QUEUE          | [DOCUMENTATION]       | Creates, gets & verifies     |                     |
+|                       | ...                   | Queue                        |                     |
+|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[0]} |
+|                       | ${getresponse}=       | executetests                 | ${API_TEST_DATA[1]} |
+|                       | verifymetadata        | ${API_TEST_DATA[0]["body"]}  | ${getresponse}      |
