@@ -11,7 +11,6 @@ import json
 
 def httpget(url, header = '', param = ''):
     """Function to perform http GET"""
-    print("In GET",url)
     if header:
     #@todo2
         header = json.loads(header)
@@ -53,7 +52,6 @@ def httpput(url, header = '', body = '', param = ''):
     """Function to perform http PUT"""
     response = None
     if header:
-    #@todo2
         header = json.loads(header)
     try:
         response = requests.put(url, headers = header, data = body,
@@ -87,6 +85,24 @@ def httpdelete(url, header = '', param = ''):
         print("TooManyRedirects: Exception in httpdelete {}".format(detail))
     return response
 
+def httppatch(url, header = '', body = '', param = ''):
+    """Function to perform http PATCH"""
+    response = None
+    if header:
+        header = json.loads(header)
+    try:
+        response = requests.patch(url, headers = header, data = body,
+                                 params = param)
+    except requests.ConnectionError as detail:
+        print("ConnectionError: Exception in httppatch {}".format(detail))
+    except requests.HTTPError as detail:
+        print("HTTPError: Exception in httppatch {}".format(detail))
+    except requests.Timeout as detail:
+        print("Timeout: Exception in httppatch {}".format(detail))
+    except requests.TooManyRedirects as detail :
+        print("TooManyRedirects: Exception in httppatch {}".format(detail))
+    return response
+
 
 def executetests(row):
     """Executes the tests defined in the API_TESTS.txt & data.csv"""
@@ -98,6 +114,7 @@ def executetests(row):
     expectedRC = row['expectedRC']
     expectedRC = int(expectedRC)
     expectedresponsebody = row['expectedResponseBody']
+    response = None
 
     if httpverb == 'GET' :
         response = httpget(url, header, params)
@@ -107,6 +124,8 @@ def executetests(row):
         response = httpput(url, header, body, params)
     elif httpverb == 'DELETE' :
         response = httpdelete(url, header, params)
+    elif httpverb == 'PATCH' :
+        response = httppatch(url, header, body, params)
     if response != None:
         testresultflag = verifyresponse(response, expectedRC, expectedresponsebody)
     else:
@@ -116,7 +135,11 @@ def executetests(row):
         print(url)
         print(header)
         print(body)
-        print("Actual Response: {}".format(response))
+        print("Actual Response: {}".format(response.status_code))
+        print("Actual Response Headers")
+        print response.headers
+        print("Actual Response Body")
+        print response.text
         print("ExpectedRC: {}".format(expectedRC))
         print("expectedresponsebody: {}".format(expectedresponsebody))
         assert testresultflag,"Actual Response does not match the Expected"
@@ -137,7 +160,8 @@ def verifyresponse(response, expectedRC, expectedresponsebody):
     else:
         testresultflag = False
         print("Unexpected http Response code {}".format(actualRC))
-        print("Response Body returned",actualresponsebody)
+        print "Response Body returned"
+        print actualresponsebody
     return testresultflag
 
 

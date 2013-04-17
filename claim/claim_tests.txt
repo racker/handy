@@ -1,32 +1,52 @@
-| *Setting*      | *Value* 			    		| *Value*    |
+| *Setting*      | *Value* 			    		|
 | Documentation  | Marconi - Queue Test Suite	|
 | Library        | httpfnlib.py           	    |
 | Library        | commonfunctions.py           |
 | Library        | claimfnlib.py                |
 | Variables      | getdata.py                   |
 | Force Tags     | CLAIM                        |
-#| Set Suite Variable | ${QUEUE_NAME}            |
-#| Suite Setup    | ${QUEUE_NAME}= | initializetestsuite  | ${20} | #Specify number of messages to be posted
-#| Suite Teardown |                     |
 
 | *Test Case*        | *Action*            | *Argument*      | *Argument*             | # Comment
 | 1:CLAIM 2 MESSAGES | [DOCUMENTATION]     | Claim messages  |                        | #TEST CASE 1 - CLAIM 2 MESSAGES
 |                    | ...                 | with limit = 2  |                        |
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]} |
 |                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[0]}    | # postresponse = [httpheaders, httpresponsebody]
 |                    | verifyclaimmsg      | ${2}            | @{postresponse}        |
 | 2:CLAIM 5 MESSAGES | [DOCUMENTATION]     | Claim messages  |                        | #TEST CASE 2 - CLAIM 5 MESSAGES
 |                    | ...                 | with limit = 5  |                        |
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]} |
 |                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[1]}    | # postresponse = [httpheaders, httpresponsebody]
 |                    | verifyclaimmsg      | ${5}            | @{postresponse}        |
 | 3:CLAIM   MESSAGES | [DOCUMENTATION]     | Claim messages  |                        | #TEST CASE 3 - CLAIM DEFAULT # OF MESSAGES
 |                    | ...                 | with no params  |                        |
 |                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[2]}    | # postresponse = [httpheaders, httpresponsebody]
 |                    | verifyclaimmsg      | ${10}           | @{postresponse}        |
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]} |
 | 4:CLAIM 15 MESSAGE | [DOCUMENTATION]     | Claim messages  |                        | #TEST CASE 4 - CLAIM 15 MESSAGES
 |                    | ...                 | with limit = 15 |                        |
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]} |
 |                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[3]}    | # postresponse = [httpheaders, httpresponsebody]
 |                    | verifyclaimmsg      | ${15}           | @{postresponse}        |
 | 5:CLAIM 55 MESSAGE | [DOCUMENTATION]     | Claim messages  |                        | #TEST CASE 5 - CLAIM 55 MESSAGES
-|                    | ...                 | with limit = 5  |                        |
+|                    | ...                 | with limit = 55 |                        |
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]} |
 |                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[4]}    | # postresponse = [httpheaders, httpresponsebody]
-|                    | verifyclaimmsg      | ${50}           | @{postresponse}        | # MAXIMUM MESSAGES RETURNED WILL BE 50
+|                    | verifyclaimmsg      | ${50}           | @{postresponse}        | # MAXIMUM MESSAGES RETURNED IS CURRENTLY 50
+| 6: PATCH CLAIM     | [DOCUMENTATION]     | Patch a claim   |                        | # TEST CASE 6 - UPDATE EXISTING CLAIM
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]} |
+|                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[0]}    | # Post a claim
+|                    | patchclaim          | @{postresponse} |                        | # Patch the above claim
+| 7: DELETE MESSAGE  | [DOCUMENTATION]     | Delete message  |                        | # TEST CASE 7 - DELETE A CLAIMED MESSAGE
+|                    | ...                 | with claim id   |                        |
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]}|                        |
+|                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[5]}    | # Post a claim
+|                    | deleteclaimedmsgs   | @{postresponse} |                        | # Delete message returned in the above claim
+|                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
+|                    | Log                 | ${queuestats[1]}|                        |
