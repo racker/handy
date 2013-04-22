@@ -39,14 +39,14 @@
 |                    | verifyclaimmsg      | ${50}           | @{postresponse}        | # MAXIMUM MESSAGES RETURNED IS CURRENTLY 50
 | 6: PATCH CLAIM     | [DOCUMENTATION]     | Patch a claim   |                        | # TEST CASE 6 - UPDATE EXISTING CLAIM
 |                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
-|                    | Log                 | ${queuestats[1]} |
+|                    | Log                 | ${queuestats[1]}|
 |                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[0]}    | # Post a claim
 |                    | patchclaim          | @{postresponse} |                        | # Patch the above claim
 | 7: DELETE MESSAGE  | [DOCUMENTATION]     | Delete message  |                        | # TEST CASE 7 - DELETE A CLAIMED MESSAGE
 |                    | ...                 | with claim id   |                        |
+|                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[5]}    | # Post a claim
 |                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
 |                    | Log                 | ${queuestats[1]}|                        |
-|                    | @{postresponse}=    | executetests    | ${API_TEST_DATA[5]}    | # Post a claim
 |                    | deleteclaimedmsgs   | @{postresponse} |                        | # Delete message returned in the above claim
 |                    | @{queuestats}=      | executetests    | ${API_TEST_DATA[6]}    | # Get Queue Stats
 |                    | Log                 | ${queuestats[1]}|                        |

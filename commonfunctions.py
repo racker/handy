@@ -46,14 +46,13 @@ def invalidauthtokenheader():
     return headers
 
 def missingheaderfields():
-    """Returns a header with invalid auth token"""
+    """Returns a header with missing USERAGENT header"""
     authtoken = getkeystonetoken()
     headers = '{"Host": "<HOST>","Date": "<DATE>",'
     headers += '"Accept": "application/json","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
     headers = headers.replace("<AuthToken>", authtoken)
     headers = headers.replace("<HOST>", HOST)
-    headers = headers.replace("<USER-AGENT>", USERAGENT)
     return headers
 
 def plaintextinheader():
@@ -96,32 +95,25 @@ def getcustomdata(handydict):
     customflag = "HANDYFLAG" in handydict.keys()
     if customflag:
         functiontocall = handydict["HANDYFLAG"]
-        if functiontocall == "invalidauthtokenheader":
-            customdata = invalidauthtokenheader()
-        elif functiontocall == "missingheaderfields":
-            customdata = missingheaderfields()
-        elif functiontocall == "plaintextinheader":
-            customdata = plaintextinheader()
-        elif functiontocall == "asteriskinheader":
-            customdata = asteriskinheader()
-        elif ("messagecount" in functiontocall.keys()):
-            customdata = getmessagebody(**functiontocall)
+        if ("messagecount" in functiontocall.keys()):
+            customdata = getmessagebody(functiontocall)
         elif ("metadatasize" in functiontocall.keys()):
-            customdata = getcustombody(**functiontocall)
+            customdata = getcustombody(functiontocall)
         return customdata
     else:
         return handydict
 
 
-def getcustombody(**kwargs):
+def getcustombody(kwargs):
     """Returns a custom requestbody"""
-    data = kwargs
+    reqbody = {"data": "<DATA>"}
     if "metadatasize" in kwargs.keys():
-        data = binascii.b2a_hex(os.urandom(kwargs["metadatasize"]))
-    return data
+        randomdata = binascii.b2a_hex(os.urandom(kwargs["metadatasize"]))
+        reqbody["data"] = randomdata
+    return json.dumps(reqbody)
 
 def getbody(inputbody):
-    """Replacing request data to use Marconi specific headers"""
+    """Replacing request data to use Marconi specific body"""
     body = {}
     if inputbody:
         custombody = getcustomdata(inputbody)
@@ -131,3 +123,13 @@ def getbody(inputbody):
         body = inputbody
     return body
 
+def createurlfromappender(appender):
+    """Returns url by catenating the base server with the appender
+       - appender should have a preceding / """
+    nexturl = str(BASE_SERVER + appender)
+    return(nexturl)
+
+def geturlfromlocation(header):
+    location = header["location"]
+    url = createurlfromappender(location)
+    return url

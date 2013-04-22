@@ -17,7 +17,7 @@ def generatedict(dictlength):
     """Returns  dictionary of specified length. Key : Value will be random"""
     dict = {}
     while len(dict) < dictlength:
-        key,value =  random.sample(words,2)
+        key, value =  random.sample(words,2)
         dict.update({key:value})
     return dict
 
@@ -69,22 +69,19 @@ def verifymetadata(getdata, postedbody):
     testresultflag = False
     getdata = str(getdata)
     postedbody = str(postedbody)
-    print(getdata,type(getdata))
-    print(postedbody,type(postedbody))
+    print(getdata, type(getdata))
+    print(postedbody, type(postedbody))
     if getdata in postedbody:
         print("AYYY")
     else:
         print("NAYYY")
 
 
-def createurl(base_url,*msgidlist):
+def createurl(base_url, *msgidlist):
     """Creates url for retrieving messages with message id"""
     url = [(base_url + msgid) for msgid in msgidlist ]
     return url
 
-def createurlfromhref(href):
-    nexturl = str(BASE_SERVER + href)
-    return(nexturl)
 
 def verifymsglength(count=10, *msglist):
     """Verifies the number of messages returned"""
@@ -100,7 +97,6 @@ def verifymsglength(count=10, *msglist):
 
 def gethref( *msglist):
     """Verifies the links returned"""
-    testresultflag = False
     msgbody = json.loads(msglist[0])
     link = msgbody["links"]
     href = link[0]["href"]
@@ -111,11 +107,11 @@ def verifypostmsg(msgheaders, postedbody):
        Message(s) & validates the message metadata"""
     testresultflag = False
     location = msgheaders['location']
-    url = createurlfromhref(location)
+    url = commonfunctions.createurlfromappender(location)
     header = commonfunctions.createmarconiheaders()
-    getmsg = httpfnlib.httpget(url,header)
+    getmsg = httpfnlib.httpget(url, header)
     if getmsg.status_code == 200:
-        msgbodyflag = verifymetadata(getmsg.text, postedbody)
+        testresultflag = verifymetadata(getmsg.text, postedbody)
     else:
         print("Failed to GET {}".format(url))
         print("Request Header")
@@ -124,13 +120,13 @@ def verifypostmsg(msgheaders, postedbody):
         print getmsg.headers
         print("Response Body")
         print getmsg.text
-        assert testresultflag,"HTTP Response code {}".format(getmsg.status_code)
+        assert testresultflag, "HTTP Response code {}".format(getmsg.status_code)
 
 def getnextmsgset(responsetext):
     """Follows the href path & GETs the next batch of messages recursively"""
     testresultflag = False
     href = gethref(responsetext)
-    url = createurlfromhref(href)
+    url = commonfunctions.createurlfromappender(href)
     header = commonfunctions.createmarconiheaders()
     getmsg = httpfnlib.httpget(url, header)
     if getmsg.status_code == 200:
@@ -142,12 +138,9 @@ def getnextmsgset(responsetext):
         testresultflag = False
         print("Failed to GET {}".format(url))
         print(getmsg.text)
-        assert testresultflag,"HTTP Response code {}".format(getmsg.status_code)
-    print("testresulflag1", testresultflag)
-    #return testresultflag
+        assert testresultflag, "HTTP Response code {}".format(getmsg.status_code)
 
-
-def verifygetmsgs(count,*getresponse):
+def verifygetmsgs(count, *getresponse):
     #import pdb; pdb.set_trace()
     """Verifies GET message & does a recursive GET if needed"""
     testresultflag = False
@@ -185,7 +178,7 @@ def deletemsg(*postresponse):
     headers = headers.replace("'",'"')
     headers = json.loads(headers)
     location = headers['location']
-    url = createurlfromhref(location)
+    url = commonfunctions.createurlfromappender(location)
     header = commonfunctions.createmarconiheaders()
     deletemsg = httpfnlib.httpdelete(url, header)
     if deletemsg.status_code == 204 :

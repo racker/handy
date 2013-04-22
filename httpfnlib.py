@@ -132,6 +132,7 @@ def executetests(row):
         testresultflag = False
 
     if not testresultflag :
+        print httpverb
         print(url)
         print(header)
         print(body)

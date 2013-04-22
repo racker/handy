@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20130417 13:36:05.232" generator="Robot 2.7.7 (Python 2.7.3 on darwin)">
+<suite source="/Users/malini.kamalambal/workspace/Marconi/src/handy/claim/claim_tests.txt" id="s1" name="Claim Tests">
+<test id="s1-t1" timeout="" name="1:CLAIM 2 MESSAGES">
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:06.809" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:06.882" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '55', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:06.882" starttime="20130417 13:36:06.807"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:06.882" level="INFO">{"messages": {"claimed": 0, "free": 128}, "actions": 0}</msg>
+<status status="PASS" endtime="20130417 13:36:06.883" starttime="20130417 13:36:06.882"></status>
+</kw>
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[0]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:06.884" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:06.961" level="INFO">@{postresponse} = [ {'content-length': '405', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd88...</msg>
+<status status="PASS" endtime="20130417 13:36:06.960" starttime="20130417 13:36:06.883"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Verifyclaimmsg" timeout="">
+<doc>Verifies claim messages. Validation steps include - verifying  the</doc>
+<arguments>
+<arg>${2}</arg>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:06.962" level="INFO">Starting new HTTPS connection (1): identity.api.rackspacecloud.com</msg>
+<msg timestamp="20130417 13:36:07.188" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<status status="PASS" endtime="20130417 13:36:07.280" starttime="20130417 13:36:06.961"></status>
+</kw>
+<doc>Claim messages
+with limit = 2</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="PASS" endtime="20130417 13:36:07.280" critical="yes" starttime="20130417 13:36:06.806"></status>
+</test>
+<test id="s1-t2" timeout="" name="2:CLAIM 5 MESSAGES">
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:07.282" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:07.342" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '55', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:07.342" starttime="20130417 13:36:07.281"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:07.343" level="INFO">{"messages": {"claimed": 2, "free": 126}, "actions": 0}</msg>
+<status status="PASS" endtime="20130417 13:36:07.343" starttime="20130417 13:36:07.342"></status>
+</kw>
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:07.344" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:07.420" level="INFO">@{postresponse} = [ {'content-length': '993', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd88...</msg>
+<status status="PASS" endtime="20130417 13:36:07.420" starttime="20130417 13:36:07.343"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Verifyclaimmsg" timeout="">
+<doc>Verifies claim messages. Validation steps include - verifying  the</doc>
+<arguments>
+<arg>${5}</arg>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:07.421" level="INFO">Starting new HTTPS connection (1): identity.api.rackspacecloud.com</msg>
+<msg timestamp="20130417 13:36:07.627" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<status status="PASS" endtime="20130417 13:36:07.737" starttime="20130417 13:36:07.420"></status>
+</kw>
+<doc>Claim messages
+with limit = 5</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="PASS" endtime="20130417 13:36:07.737" critical="yes" starttime="20130417 13:36:07.280"></status>
+</test>
+<test id="s1-t3" timeout="" name="3:CLAIM MESSAGES">
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[2]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:07.739" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:07.872" level="INFO">@{postresponse} = [ {'content-length': '1989', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd8...</msg>
+<status status="PASS" endtime="20130417 13:36:07.872" starttime="20130417 13:36:07.738"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Verifyclaimmsg" timeout="">
+<doc>Verifies claim messages. Validation steps include - verifying  the</doc>
+<arguments>
+<arg>${10}</arg>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:07.874" level="INFO">Starting new HTTPS connection (1): identity.api.rackspacecloud.com</msg>
+<msg timestamp="20130417 13:36:08.086" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<status status="PASS" endtime="20130417 13:36:08.194" starttime="20130417 13:36:07.873"></status>
+</kw>
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.196" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:08.257" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '56', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:08.257" starttime="20130417 13:36:08.195"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.257" level="INFO">{"messages": {"claimed": 17, "free": 111}, "actions": 0}</msg>
+<status status="PASS" endtime="20130417 13:36:08.257" starttime="20130417 13:36:08.257"></status>
+</kw>
+<doc>Claim messages
+with no params</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="PASS" endtime="20130417 13:36:08.257" critical="yes" starttime="20130417 13:36:07.738"></status>
+</test>
+<test id="s1-t4" timeout="" name="4:CLAIM 15 MESSAGE">
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.259" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:08.320" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '56', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:08.320" starttime="20130417 13:36:08.258"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.321" level="INFO">{"messages": {"claimed": 17, "free": 111}, "actions": 0}</msg>
+<status status="PASS" endtime="20130417 13:36:08.321" starttime="20130417 13:36:08.320"></status>
+</kw>
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[3]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.322" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:08.422" level="INFO">@{postresponse} = [ {'content-length': '3039', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd8...</msg>
+<status status="PASS" endtime="20130417 13:36:08.422" starttime="20130417 13:36:08.321"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Verifyclaimmsg" timeout="">
+<doc>Verifies claim messages. Validation steps include - verifying  the</doc>
+<arguments>
+<arg>${15}</arg>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.423" level="INFO">Starting new HTTPS connection (1): identity.api.rackspacecloud.com</msg>
+<msg timestamp="20130417 13:36:08.638" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<status status="PASS" endtime="20130417 13:36:08.756" starttime="20130417 13:36:08.422"></status>
+</kw>
+<doc>Claim messages
+with limit = 15</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="PASS" endtime="20130417 13:36:08.756" critical="yes" starttime="20130417 13:36:08.258"></status>
+</test>
+<test id="s1-t5" timeout="" name="5:CLAIM 55 MESSAGE">
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.758" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:08.860" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '55', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:08.860" starttime="20130417 13:36:08.757"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.861" level="INFO">{"messages": {"claimed": 32, "free": 96}, "actions": 0}</msg>
+<status status="PASS" endtime="20130417 13:36:08.861" starttime="20130417 13:36:08.860"></status>
+</kw>
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[4]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:08.862" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.007" level="INFO">@{postresponse} = [ {'content-length': '11086', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd...</msg>
+<status status="PASS" endtime="20130417 13:36:09.007" starttime="20130417 13:36:08.861"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Verifyclaimmsg" timeout="">
+<doc>Verifies claim messages. Validation steps include - verifying  the</doc>
+<arguments>
+<arg>${50}</arg>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.015" level="FAIL"> More messages returned than specified in limit</msg>
+<status status="FAIL" endtime="20130417 13:36:09.015" starttime="20130417 13:36:09.008"></status>
+</kw>
+<doc>Claim messages
+with limit = 55</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="FAIL" endtime="20130417 13:36:09.016" critical="yes" starttime="20130417 13:36:08.756"> More messages returned than specified in limit</status>
+</test>
+<test id="s1-t6" timeout="" name="6: PATCH CLAIM">
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.018" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.094" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '55', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:09.094" starttime="20130417 13:36:09.017"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.095" level="INFO">{"messages": {"claimed": 87, "free": 41}, "actions": 0}</msg>
+<status status="PASS" endtime="20130417 13:36:09.095" starttime="20130417 13:36:09.094"></status>
+</kw>
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[0]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.096" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.167" level="INFO">@{postresponse} = [ {'content-length': '402', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd8a...</msg>
+<status status="PASS" endtime="20130417 13:36:09.167" starttime="20130417 13:36:09.095"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Patchclaim" timeout="">
+<doc>Extracts claim id from the POST response input &amp; update the claim </doc>
+<arguments>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.168" level="INFO">Starting new HTTPS connection (1): identity.api.rackspacecloud.com</msg>
+<msg timestamp="20130417 13:36:09.380" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.437" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.501" level="INFO">{ "ttl": 300 }</msg>
+<status status="PASS" endtime="20130417 13:36:09.501" starttime="20130417 13:36:09.167"></status>
+</kw>
+<doc>Patch a claim</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="PASS" endtime="20130417 13:36:09.501" critical="yes" starttime="20130417 13:36:09.016"></status>
+</test>
+<test id="s1-t7" timeout="" name="7: DELETE MESSAGE">
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.503" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.566" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '55', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:09.566" starttime="20130417 13:36:09.502"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}|</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.567" level="INFO">{"messages": {"claimed": 89, "free": 39}, "actions": 0}|</msg>
+<status status="PASS" endtime="20130417 13:36:09.567" starttime="20130417 13:36:09.566"></status>
+</kw>
+<kw type="kw" name="@{postresponse} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[5]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.568" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.675" level="INFO">@{postresponse} = [ {'content-length': '813', 'content-type': 'application/json; charset=utf-8', 'connection': 'Keep-Alive', 'x-cache': 'MISS from 74.205.74.44', 'location': '/v1/1/queues/claimqueueadd7/claims/516edd8b...</msg>
+<status status="PASS" endtime="20130417 13:36:09.674" starttime="20130417 13:36:09.567"></status>
+</kw>
+<kw type="kw" name="claimfnlib.Deleteclaimedmsgs" timeout="">
+<doc></doc>
+<arguments>
+<arg>@{postresponse}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:09.676" level="INFO">Starting new HTTPS connection (1): identity.api.rackspacecloud.com</msg>
+<msg timestamp="20130417 13:36:09.879" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.931" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:09.992" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.045" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.101" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.154" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.209" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.262" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.321" level="INFO">http://166.78.143.130:80/v1/1/queues/claimqueueadd7/messages/516ebff520517e644e498c9b?claim_id=516edd8b20517e644f497551
+http://166.78.143.130:80/v1/1/queues/claimqueueadd7/messages/516ebff520517e644e498c9c?claim_id=516edd8b20517e644f497551
+http://166.78.143.130:80/v1/1/queues/claimqueueadd7/messages/516ebff520517e644e498c9d?claim_id=516edd8b20517e644f497551
+http://166.78.143.130:80/v1/1/queues/claimqueueadd7/messages/516ebff520517e644e498c9e?claim_id=516edd8b20517e644f497551</msg>
+<status status="PASS" endtime="20130417 13:36:10.321" starttime="20130417 13:36:09.675"></status>
+</kw>
+<kw type="kw" name="@{queuestats} = httpfnlib.Executetests" timeout="">
+<doc>Executes the tests defined in the API_TESTS.txt &amp; data.csv</doc>
+<arguments>
+<arg>${API_TEST_DATA[6]}</arg>
+</arguments>
+<msg timestamp="20130417 13:36:10.322" level="INFO">Starting new HTTP connection (1): 166.78.143.130</msg>
+<msg timestamp="20130417 13:36:10.385" level="INFO">@{queuestats} = [ {'connection': 'Keep-Alive', 'content-type': 'application/json; charset=utf-8', 'content-length': '55', 'x-cache': 'MISS from 74.205.74.44', 'content-location': '/v1/1/queues/claimqueueadd7/stats'} ...</msg>
+<status status="PASS" endtime="20130417 13:36:10.385" starttime="20130417 13:36:10.321"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Log" timeout="">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${queuestats[1]}|</arg>
+</arguments>
+<msg timestamp="20130417 13:36:10.385" level="INFO">{"messages": {"claimed": 89, "free": 35}, "actions": 0}|</msg>
+<status status="PASS" endtime="20130417 13:36:10.386" starttime="20130417 13:36:10.385"></status>
+</kw>
+<doc>Delete message
+with claim id</doc>
+<tags>
+<tag>CLAIM</tag>
+</tags>
+<status status="PASS" endtime="20130417 13:36:10.386" critical="yes" starttime="20130417 13:36:09.501"></status>
+</test>
+<doc>Marconi - Queue Test Suite</doc>
+<metadata>
+</metadata>
+<status status="FAIL" endtime="20130417 13:36:10.386" starttime="20130417 13:36:05.232"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="6">Critical Tests</stat>
+<stat fail="1" pass="6">All Tests</stat>
+</total>
+<tag>
+<stat info="" links="" doc="" combined="" pass="6" fail="1">CLAIM</stat>
+</tag>
+<suite>
+<stat fail="1" pass="6" id="s1" name="Claim Tests">Claim Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
