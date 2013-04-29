@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
+
 import common
 
 def get_data():
@@ -10,7 +11,9 @@ def get_data():
         for row in testdata:
             DATA.append(row)
     for row in DATA:
+        row['header']  = common.commonfunctions.get_headers(row['header'])
         row['url'] = row['url'].replace("<BASE_URL>", common.config.BASE_URL)
     return DATA
+
 
 API_TEST_DATA = get_data()

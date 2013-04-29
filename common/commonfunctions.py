@@ -1,19 +1,21 @@
-import http
+import binascii
 import json
 import os
-import binascii
 import uuid
-#from env import *
+
 import config
+import http
 
 UUID = str(uuid.uuid1())
 
 
-def getkeystonetoken():
+def get_keystone_token():
     """Gets Keystone Auth token"""
 
-    req_json = {"auth":{"passwordCredentials":{"username":config.USERNAME,"password":config.PASSWORD}}}
-    header = '{"Host": "identity.api.rackspacecloud.com","Content-Type": "application/json","Accept": "application/json"}'
+    req_json = {"auth":{"passwordCredentials":{"username":config.USERNAME,
+                                               "password":config.PASSWORD}}}
+    header = '{"Host": "identity.api.rackspacecloud.com",'
+    header += '"Content-Type": "application/json","Accept": "application/json"}'
     url = config.AUTH_URL
     response = http.post(url = url, header = header, body = req_json)
     responsebody = json.loads(response.text)
@@ -21,11 +23,11 @@ def getkeystonetoken():
     return authtoken
 
 
-def createmarconiheaders():
+def create_marconi_headers():
     """Returns headers to be used for all Marconi requests"""
 
     if config.AUTH_FLAG == "true":
-        authtoken = getkeystonetoken()
+        authtoken = get_keystone_token()
     else:
         authtoken = "notrealtoken"
     headers = '{"Host": "<HOST>","User-Agent": "<USER-AGENT>","Date": "<DATE>",'
@@ -39,7 +41,7 @@ def createmarconiheaders():
     return headers
 
 
-def invalidauthtokenheader():
+def invalid_authtoken_header():
     """Returns a header with invalid auth token"""
     authtoken = "0101BLAHBLAHINVALID"
     headers = '{"Host": "<HOST>","User-Agent": "<USER-AGENT>","Date": "<DATE>",'
@@ -51,9 +53,9 @@ def invalidauthtokenheader():
     return headers
 
 
-def missingheaderfields():
+def missing_header_fields():
     """Returns a header with missing USERAGENT header"""
-    authtoken = getkeystonetoken()
+    authtoken = get_keystone_token()
     headers = '{"Host": "<HOST>","Date": "<DATE>",'
     headers += '"Accept": "application/json","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
@@ -62,10 +64,10 @@ def missingheaderfields():
     return headers
 
 
-def plaintextinheader():
+def plain_text_in_header():
     """Returns headers to be used for all Marconi requests"""
 
-    authtoken = getkeystonetoken()
+    authtoken = get_keystone_token()
     headers = '{"Host": "<HOST>","User-Agent": "<USER-AGENT>","Date": "<DATE>",'
     headers += '"Accept": "text/plain","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
@@ -75,10 +77,10 @@ def plaintextinheader():
     return headers
 
 
-def asteriskinheader():
+def asterisk_in_header():
     """Returns headers to be used for all Marconi requests"""
 
-    authtoken = getkeystonetoken()
+    authtoken = get_keystone_token()
     headers = '{"Host": "<HOST>","User-Agent": "<USER-AGENT>","Date": "<DATE>",'
     headers += '"Accept": "*/*","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
@@ -88,18 +90,21 @@ def asteriskinheader():
     return headers
 
 
-def getheaders(inputheader):
+def get_headers(inputheader):
     """Replacing header data to use Marconi /TestCase specific headers"""
-    if inputheader:
+    '''if inputheader:
         customheader = getcustomdata(inputheader)
         if customheader:
             header = customheader
+    else:'''
+    if inputheader:
+        header = inputheader
     else:
-        header = createmarconiheaders()
+        header = create_marconi_headers()
     return header
 
 
-def getcustombody(kwargs):
+def get_custom_body(kwargs):
     """Returns a custom requestbody"""
     reqbody = {"data": "<DATA>"}
     if "metadatasize" in kwargs.keys():
@@ -108,7 +113,7 @@ def getcustombody(kwargs):
     return json.dumps(reqbody)
 
 
-def getbody(inputbody):
+def get_body(inputbody):
     """Replacing request data to use Marconi specific body"""
     body = {}
     if inputbody:
@@ -120,15 +125,15 @@ def getbody(inputbody):
     return body
 
 
-def createurlfromappender(appender):
+def create_url_from_appender(appender):
     """Returns url by catenating the base server with the appender
        - appender should have a preceding / """
     nexturl = str(config.BASE_SERVER + appender)
     return(nexturl)
 
 
-def geturlfromlocation(header):
+def get_url_from_location(header):
     location = header["location"]
-    url = createurlfromappender(location)
+    url = create_url_from_appender(location)
     return url
 

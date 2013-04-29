@@ -1,10 +1,11 @@
-import json
 import binascii
+import json
 import os
+
 import common
 
 
-def verifymetadata(getdata, postedbody):
+def verify_metadata(getdata, postedbody):
     """@todo - Really verify the metadata"""
     testresultflag = False
     getdata = str(getdata)
@@ -16,7 +17,8 @@ def verifymetadata(getdata, postedbody):
     else:
         print("NAYYY")
 
-def verifyqueuestats(*getresponse):
+
+def verify_queue_stats(*getresponse):
     """Verifies that
        1. stats json body has the keys - action & messages
        2. messages json has the keys - claimed & free
@@ -47,12 +49,14 @@ def verifyqueuestats(*getresponse):
         print body
         assert testresultflag, "Get Request stats failed"
 
-def getqueuename(namelength = 513):
+
+def get_queue_name(namelength = 513):
     """Returns a queuename of specified length.
        By default, a name longer than Marconi allows - currently 512 bytes"""
     appender = "/queues/" + binascii.b2a_hex(os.urandom(namelength))
-    url = common.commonfunctions.createurlfromappender(appender)
+    url = common.commonfunctions.create_url_from_appender(appender)
     return url
 
-def queueteardown():
+
+def queue_teardown():
     pass

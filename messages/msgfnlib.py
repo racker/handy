@@ -1,6 +1,7 @@
 from __future__ import with_statement
 import json
 import random
+
 import common
 import http
 
@@ -12,7 +13,8 @@ with open('/usr/share/dict/words', 'rt') as f:
     words = f.readlines()
 words = [ w.rstrip() for w in words ]
 
-def generatedict(dictlength):
+
+def generate_dict(dictlength):
     """Returns  dictionary of specified length. Key : Value will be random"""
     dict = {}
     while len(dict) < dictlength:
@@ -20,12 +22,13 @@ def generatedict(dictlength):
         dict.update({key:value})
     return dict
 
-def singlemessagebody(**kwargs):
+
+def single_message_body(**kwargs):
     """Returns message body for one message"""
     if "messagesize" in kwargs.keys():
-        body = generatedict(kwargs["messagesize"])
+        body = generate_dict(kwargs["messagesize"])
     else:
-        body = generatedict(2)
+        body = generate_dict(2)
     if "ttl" in kwargs.keys():
         ttl = kwargs["ttl"]
     else:
@@ -33,37 +36,42 @@ def singlemessagebody(**kwargs):
     messagebody = {"ttl":ttl, "body":body}
     return messagebody
 
-def getmessagebody(**kwargs):
+
+def get_message_body(**kwargs):
     """Returns message body to post"""
     messagecount = kwargs["messagecount"]
     bigmessagebody = []
     i = 0
     while i < messagecount:
-        messagebody = singlemessagebody(**kwargs)
+        messagebody = single_message_body(**kwargs)
         bigmessagebody.append(messagebody)
         i = i + 1
     return bigmessagebody
 
-def dummygetmessagebody(dict):
-    """Dummy function to call getmessagebody because Robot framework does not
+
+def dummyget_message_body(dict):
+    """Dummy function to call get_message_body because Robot framework does not
        support **kwargs"""
-    dict = getmessagebody(**dict)
+    dict = get_message_body(**dict)
     return dict
 
-def extractid(type, str):
+
+def extract_id(type, str):
     """Extracts the message ids returned by the server
        type can be /messages/ or /claims/ """
     id = str.partition(type)[2]
     id = id.rsplit(",")
     return id
 
-def extractmsgid(responseheader):
+
+def extract_msg_id(responseheader):
     """Extracts message ID from the header returned for post message"""
     location = responseheader["location"]
-    msgid = extractid("/messages/", location)
+    msgid = extract_id("/messages/", location)
     return msgid
 
-def verifymetadata(getdata, postedbody):
+
+def verify_metadata(getdata, postedbody):
     """@todo - Really verify the metadata"""
     testresultflag = False
     getdata = str(getdata)
@@ -76,13 +84,13 @@ def verifymetadata(getdata, postedbody):
         print("NAYYY")
 
 
-def createurl(base_url, *msgidlist):
+def create_url(base_url, *msgidlist):
     """Creates url for retrieving messages with message id"""
     url = [(base_url + msgid) for msgid in msgidlist ]
     return url
 
 
-def verifymsglength(count=10, *msglist):
+def verify_msg_length(count=10, *msglist):
     """Verifies the number of messages returned"""
     testresultflag = False
     msgbody = json.loads(msglist[0])
@@ -94,23 +102,25 @@ def verifymsglength(count=10, *msglist):
         return testresultflag
     return testresultflag
 
-def gethref( *msglist):
+
+def get_href( *msglist):
     """Verifies the links returned"""
     msgbody = json.loads(msglist[0])
     link = msgbody["links"]
     href = link[0]["href"]
     return href
 
-def verifypostmsg(msgheaders, postedbody):
+
+def verify_post_msg(msgheaders, postedbody):
     """Verifies the response of POST Message(s) - Retrieves the posted
        Message(s) & validates the message metadata"""
     testresultflag = False
     location = msgheaders['location']
-    url = common.commonfunctions.createurlfromappender(location)
-    header = common.commonfunctions.createmarconiheaders()
+    url = common.commonfunctions.create_url_from_appender(location)
+    header = common.commonfunctions.create_marconi_headers()
     getmsg = http.get(url, header)
     if getmsg.status_code == 200:
-        testresultflag = verifymetadata(getmsg.text, postedbody)
+        testresultflag = verify_metadata(getmsg.text, postedbody)
     else:
         print("Failed to GET {}".format(url))
         print("Request Header")
@@ -121,15 +131,16 @@ def verifypostmsg(msgheaders, postedbody):
         print getmsg.text
         assert testresultflag, "HTTP Response code {}".format(getmsg.status_code)
 
-def getnextmsgset(responsetext):
+
+def get_next_msgset(responsetext):
     """Follows the href path & GETs the next batch of messages recursively"""
     testresultflag = False
-    href = gethref(responsetext)
-    url = common.commonfunctions.createurlfromappender(href)
-    header = common.commonfunctions.createmarconiheaders()
+    href = get_href(responsetext)
+    url = common.commonfunctions.create_url_from_appender(href)
+    header = common.commonfunctions.create_marconi_headers()
     getmsg = http.get(url, header)
     if getmsg.status_code == 200:
-        return getnextmsgset(getmsg.text)
+        return get_next_msgset(getmsg.text)
     elif getmsg.status_code == 204:
         testresultflag = True
         return testresultflag
@@ -139,22 +150,24 @@ def getnextmsgset(responsetext):
         print(getmsg.text)
         assert testresultflag, "HTTP Response code {}".format(getmsg.status_code)
 
-def verifygetmsgs(count, *getresponse):
+
+def verify_get_msgs(count, *getresponse):
     #import pdb; pdb.set_trace()
     """Verifies GET message & does a recursive GET if needed"""
     testresultflag = False
     headers = getresponse[0]
     body = getresponse[1]
-    msglengthflag = verifymsglength(count,body)
+    msglengthflag = verify_msg_length(count,body)
     if msglengthflag:
-        testresultflag = getnextmsgset(body)
+        testresultflag = get_next_msgset(body)
     else:
         print("Messages returned exceed requested number of messages")
         testresultflag = False
     if not testresultflag:
         assert testresultflag, "Recursive Get Messages Failed"
 
-def verifydelete(url, header):
+
+def verify_delete(url, header):
     testresultflag = False
     getmsg = http.get(url, header)
     if getmsg.status_code == 404:
@@ -170,18 +183,19 @@ def verifydelete(url, header):
         assert testresultflag, "GET Response Code {}".format(getmsg.status_code)
     return testresultflag
 
-def deletemsg(*postresponse):
+
+def delete_msg(*postresponse):
     """Post DELETE message & verifies that a subsequent GET returns 404"""
     testresultflag = False
     headers = str(postresponse[0])
     headers = headers.replace("'",'"')
     headers = json.loads(headers)
     location = headers['location']
-    url = common.commonfunctions.createurlfromappender(location)
-    header = common.commonfunctions.createmarconiheaders()
+    url = common.commonfunctions.create_url_from_appender(location)
+    header = common.commonfunctions.create_marconi_headers()
     deletemsg = http.delete(url, header)
     if deletemsg.status_code == 204 :
-        testresultflag = verifydelete(url,header)
+        testresultflag = verify_delete(url,header)
     else:
         print("DELETE message failed")
         print("URL")

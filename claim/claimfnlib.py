@@ -1,37 +1,39 @@
-#from messages import msgfnlib
 import json
 import http
+
 import common
 
-def initializetestsuite(msgcount):
+def initialize_test_suite(msgcount):
     pass
 
-def createurlfromlocn(location):
+
+def create_url_fromlocn(location):
     url = str(common.config.BASE_SERVER + location)
     return(url)
 
-def verifyclaimmsg(count, *postresponse):
+
+def verify_claim_msg(count, *postresponse):
     """Verifies claim messages. Validation steps include - verifying  the"""
     """1. number of messages returned is <= limit specified  """
     """2. query claim & verifying the response"""
     msglengthflag = False
     headers = postresponse[0]
     body = postresponse[1]
-    msglengthflag = verifyclaimsglength(count, body)
+    msglengthflag = verify_claim_msglength(count, body)
     if msglengthflag :
-        queryclaim(headers, body)
+        query_claim(headers, body)
     else:
         assert msglengthflag, " More messages returned than specified in limit"
 
 
-def verifyclaimsglength(count, *body):
+def verify_claim_msglength(count, *body):
     """ Validates that number of messages returned is <= limit specified """
     msglist = body
     msglist = json.loads(msglist[0])
     return (len(msglist) <= count)
 
 
-def queryclaim(headers, *body):
+def query_claim(headers, *body):
     """ Performs a Query Claim using the href in post claim
         Compares the messages returned in Query claim with the messages
         returned on Post Claim"""
@@ -39,13 +41,13 @@ def queryclaim(headers, *body):
     msglist = body[0]
     msglist = json.loads(msglist)
     location = headers["Location"]
-    url = createurlfromlocn(location)
-    header = common.commonfunctions.createmarconiheaders()
+    url = create_url_fromlocn(location)
+    header = common.commonfunctions.create_marconi_headers()
     getmsg = http.get(url,header)
     if getmsg.status_code == 200:
         querybody = json.loads(getmsg.text)
         querymsgs = querybody["messages"]
-        testresultflag = verifyquerymsgs(querymsgs, msglist)
+        testresultflag = verify_query_msgs(querymsgs, msglist)
     if testresultflag:
         return testresultflag
     else:
@@ -61,7 +63,8 @@ def queryclaim(headers, *body):
         print "# of Messages returned by Claim messages", len(msglist)
         assert testresultflag, "Query Claim Failed"
 
-def verifyquerymsgs(querymsgs, msglist):
+
+def verify_query_msgs(querymsgs, msglist):
     """Compares the messages returned in Query Claim with the messages
        returned when the claim was posted"""
     testresultflag = True
@@ -74,21 +77,22 @@ def verifyquerymsgs(querymsgs, msglist):
         idx = idx + 1
     return testresultflag
 
-def patchclaim(*postresponse):
+
+def patch_claim(*postresponse):
     """Extracts claim id from the POST response input & update the claim """
     testresultflag = False
     headers = postresponse[0]
     body = postresponse[1]
     location = headers["Location"]
-    url = createurlfromlocn(location)
-    header = common.commonfunctions.createmarconiheaders()
+    url = create_url_fromlocn(location)
+    header = common.commonfunctions.create_marconi_headers()
     ttlvalue = 300
     payload = '{ "ttl": ttlvalue }'
     payload = payload.replace("ttlvalue", str(ttlvalue))
     print payload
     patchresponse = http.patch(url, header, body = payload)
     if patchresponse.status_code == 204 :
-        testresultflag = verifypatchclaim(url, header, ttlvalue)
+        testresultflag = verify_patch_claim(url, header, ttlvalue)
     else:
         print "Patch HTTP Response code: {}".format(patchresponse.status_code)
         print patchresponse.headers
@@ -98,27 +102,29 @@ def patchclaim(*postresponse):
         assert testresultflag, "Query claim after the patch failed"
 
 
-def verifypatchclaim(url, header, ttlvalue):
+def verify_patch_claim(url, header, ttlvalue):
     testresultflag = True
-    queryclaim = http.get(url,header)
-    responsebody = json.loads(queryclaim.text)
+    getclaim = http.get(url,header)
+    responsebody = json.loads(getclaim.text)
     ttl = responsebody["ttl"]
     if ttl < ttlvalue:
-        print queryclaim.status_code
-        print queryclaim.headers
-        print queryclaim.text
+        print getclaim.status_code
+        print getclaim.headers
+        print getclaim.text
         testresultflag = False
     return testresultflag
 
-def createurllistfromhref(*postresponse):
+
+def create_urllist_fromhref(*postresponse):
     rspbody = json.loads(postresponse[1])
-    urllist = [createurlfromlocn(item["href"]) for item in rspbody]
+    urllist = [create_url_fromlocn(item["href"]) for item in rspbody]
     return urllist
 
-def deleteclaimedmsgs(*postresponse):
+
+def delete_claimed_msgs(*postresponse):
     testresultflag = False
-    urllist = createurllistfromhref(*postresponse)
-    header = common.commonfunctions.createmarconiheaders()
+    urllist = create_urllist_fromhref(*postresponse)
+    header = common.commonfunctions.create_marconi_headers()
     for url in urllist:
         deletersp = http.delete(url,header)
         if deletersp.status_code == 204:
