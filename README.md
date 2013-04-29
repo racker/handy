@@ -17,9 +17,9 @@ Make sure you have the following Python modules installed
   
 cd to the handy directory
 
-Update env.py to point to the env you want to run the tests against
+Update etc/handy.conf to point to the env you want to run the tests against
 
-Enter the cloud username & password in commonfunctions.py.getkeystonetoken()
+Enter the cloud username & password in  etc/handy.conf
 
 To run tests use the pybot command in the following format,
 
