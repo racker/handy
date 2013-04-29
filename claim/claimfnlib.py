@@ -7,7 +7,7 @@ def initializetestsuite(msgcount):
     pass
 
 def createurlfromlocn(location):
-    url = str(common.env.BASE_SERVER + location)
+    url = str(common.config.BASE_SERVER + location)
     return(url)
 
 def verifyclaimmsg(count, *postresponse):

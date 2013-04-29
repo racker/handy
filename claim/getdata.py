@@ -9,11 +9,9 @@ def get_data():
         testdata = csv.DictReader(datafile, delimiter = '|')
         for row in testdata:
             DATA.append(row)
-    # Replace the for loop below to implement project specific logic
     for row in DATA:
         row['header']  = common.commonfunctions.getheaders(row['header'])
-        #row['body']  = json.dumps(getbody(row['body']))
-        row['url'] = row['url'].replace("<BASE_URL>",common.env.BASE_URL)
+        row['url'] = row['url'].replace("<BASE_URL>",common.config.BASE_URL)
     return DATA
 
 API_TEST_DATA = get_data()

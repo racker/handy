@@ -1,4 +1,5 @@
 *.pyc
 *.html
 *.xml
+createclaimmessages_tests.txt
 .DS_Store

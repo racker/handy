@@ -3,7 +3,8 @@ import json
 import os
 import binascii
 import uuid
-from env import *
+#from env import *
+import config
 
 UUID = str(uuid.uuid1())
 
@@ -11,9 +12,9 @@ UUID = str(uuid.uuid1())
 def getkeystonetoken():
     """Gets Keystone Auth token"""
 
-    req_json = '{"auth":{"passwordCredentials":{"username":"","password":""}}}'
+    req_json = {"auth":{"passwordCredentials":{"username":config.USERNAME,"password":config.PASSWORD}}}
     header = '{"Host": "identity.api.rackspacecloud.com","Content-Type": "application/json","Accept": "application/json"}'
-    url = AUTH_URL
+    url = config.AUTH_URL
     response = http.post(url = url, header = header, body = req_json)
     responsebody = json.loads(response.text)
     authtoken = responsebody["access"]["token"]["id"]
@@ -23,13 +24,16 @@ def getkeystonetoken():
 def createmarconiheaders():
     """Returns headers to be used for all Marconi requests"""
 
-    authtoken = getkeystonetoken()
+    if config.AUTH_FLAG == "true":
+        authtoken = getkeystonetoken()
+    else:
+        authtoken = "notrealtoken"
     headers = '{"Host": "<HOST>","User-Agent": "<USER-AGENT>","Date": "<DATE>",'
     headers += '"Accept": "application/json","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>","Client-ID": "<UUID>"}'
     headers = headers.replace("<AuthToken>", authtoken)
-    headers = headers.replace("<HOST>", HOST)
-    headers = headers.replace("<USER-AGENT>", USERAGENT)
+    headers = headers.replace("<HOST>", config.HOST)
+    headers = headers.replace("<USER-AGENT>", config.USERAGENT)
     headers = headers.replace("<UUID>", UUID)
 
     return headers
@@ -42,8 +46,8 @@ def invalidauthtokenheader():
     headers += '"Accept": "application/json","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
     headers = headers.replace("<AuthToken>", authtoken)
-    headers = headers.replace("<HOST>", HOST)
-    headers = headers.replace("<USER-AGENT>", USERAGENT)
+    headers = headers.replace("<HOST>", config.HOST)
+    headers = headers.replace("<USER-AGENT>", config.USERAGENT)
     return headers
 
 
@@ -54,7 +58,7 @@ def missingheaderfields():
     headers += '"Accept": "application/json","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
     headers = headers.replace("<AuthToken>", authtoken)
-    headers = headers.replace("<HOST>", HOST)
+    headers = headers.replace("<HOST>", config.HOST)
     return headers
 
 
@@ -66,8 +70,8 @@ def plaintextinheader():
     headers += '"Accept": "text/plain","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
     headers = headers.replace("<AuthToken>", authtoken)
-    headers = headers.replace("<HOST>", HOST)
-    headers = headers.replace("<USER-AGENT>", USERAGENT)
+    headers = headers.replace("<HOST>", config.HOST)
+    headers = headers.replace("<USER-AGENT>", config.USERAGENT)
     return headers
 
 
@@ -79,8 +83,8 @@ def asteriskinheader():
     headers += '"Accept": "*/*","Accept-Encoding": "gzip",'
     headers += '"X-Auth-Token": "<AuthToken>"}'
     headers = headers.replace("<AuthToken>", authtoken)
-    headers = headers.replace("<HOST>", HOST)
-    headers = headers.replace("<USER-AGENT>", USERAGENT)
+    headers = headers.replace("<HOST>", config.HOST)
+    headers = headers.replace("<USER-AGENT>", config.USERAGENT)
     return headers
 
 
@@ -119,7 +123,7 @@ def getbody(inputbody):
 def createurlfromappender(appender):
     """Returns url by catenating the base server with the appender
        - appender should have a preceding / """
-    nexturl = str(BASE_SERVER + appender)
+    nexturl = str(config.BASE_SERVER + appender)
     return(nexturl)
 
 

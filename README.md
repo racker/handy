@@ -12,6 +12,8 @@ Make sure you have the following Python modules installed
     Requests
     
     Robot
+
+    ConfigParser
   
 cd to the handy directory
 

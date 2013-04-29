@@ -11,7 +11,7 @@ def get_data():
             DATA.append(row)
     for row in DATA:
         row['header']  = common.commonfunctions.getheaders(row['header'])
-        row['url'] = row['url'].replace("<BASE_URL>",common.env.BASE_URL)
+        row['url'] = row['url'].replace("<BASE_URL>",common.config.BASE_URL)
     return DATA
 
 API_TEST_DATA = get_data()

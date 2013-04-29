@@ -1,9 +1,8 @@
 from __future__ import with_statement
-import random
 import json
-from env import  *
-import http
+import random
 import common
+import http
 
 validttl = random.randint(60, 1209600)
 negativettl = -validttl

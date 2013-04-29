@@ -10,7 +10,7 @@ def get_data():
         for row in testdata:
             DATA.append(row)
     for row in DATA:
-        row['url'] = row['url'].replace("<BASE_URL>", common.env.BASE_URL)
+        row['url'] = row['url'].replace("<BASE_URL>", common.config.BASE_URL)
     return DATA
 
 API_TEST_DATA = get_data()
