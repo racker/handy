@@ -3,8 +3,8 @@ from ConfigParser import SafeConfigParser
 parser = SafeConfigParser()
 parser.read('etc/handy.conf')
 
-AUTH_FLAG = parser.get('auth', 'auth_on').lower()
-if AUTH_FLAG == "true":
+AUTH_FLAG = parser.getboolean('auth', 'auth_on')
+if AUTH_FLAG:
      AUTH_URL = parser.get('auth', 'url')
      USERNAME = parser.get('auth', 'username')
      PASSWORD = parser.get('auth', 'password')
