@@ -71,19 +71,6 @@ def extract_msg_id(responseheader):
     return msgid
 
 
-def verify_metadata(getdata, postedbody):
-    """@todo - Really verify the metadata"""
-    testresultflag = False
-    getdata = str(getdata)
-    postedbody = str(postedbody)
-    print(getdata, type(getdata))
-    print(postedbody, type(postedbody))
-    if getdata in postedbody:
-        print("AYYY")
-    else:
-        print("NAYYY")
-
-
 def create_url(base_url, *msgidlist):
     """Creates url for retrieving messages with message id"""
     url = [(base_url + msgid) for msgid in msgidlist ]
@@ -120,7 +107,8 @@ def verify_post_msg(msgheaders, postedbody):
     header = common.commonfunctions.create_marconi_headers()
     getmsg = http.get(url, header)
     if getmsg.status_code == 200:
-        testresultflag = verify_metadata(getmsg.text, postedbody)
+        testresultflag = common.commonfunctions.verify_metadata(getmsg.text,
+                                                                 postedbody)
     else:
         print("Failed to GET {}".format(url))
         print("Request Header")

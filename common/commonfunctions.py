@@ -137,3 +137,15 @@ def get_url_from_location(header):
     url = create_url_from_appender(location)
     return url
 
+
+def verify_metadata(getdata, postedbody):
+    """@todo - Really verify the metadata"""
+    testresultflag = False
+    getdata = str(getdata)
+    postedbody = str(postedbody)
+    print(getdata, type(getdata))
+    print(postedbody, type(postedbody))
+    if getdata in postedbody:
+        print("AYYY")
+    else:
+        print("NAYYY")

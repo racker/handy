@@ -5,19 +5,6 @@ import os
 import common
 
 
-def verify_metadata(getdata, postedbody):
-    """@todo - Really verify the metadata"""
-    testresultflag = False
-    getdata = str(getdata)
-    postedbody = str(postedbody)
-    print(getdata,type(getdata))
-    print(postedbody,type(postedbody))
-    if getdata in postedbody:
-        print("AYYY")
-    else:
-        print("NAYYY")
-
-
 def verify_queue_stats(*getresponse):
     """Verifies that
        1. stats json body has the keys - action & messages
