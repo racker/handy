@@ -1,13 +1,12 @@
-import httpfnlib
+import http
 import json
 import os
 import binascii
-import random
-import sys
 import uuid
-from env import  *
+from env import *
 
 UUID = str(uuid.uuid1())
+
 
 def getkeystonetoken():
     """Gets Keystone Auth token"""
@@ -15,10 +14,11 @@ def getkeystonetoken():
     req_json = '{"auth":{"passwordCredentials":{"username":"","password":""}}}'
     header = '{"Host": "identity.api.rackspacecloud.com","Content-Type": "application/json","Accept": "application/json"}'
     url = AUTH_URL
-    response = httpfnlib.httppost(url = url,header = header, body = req_json)
+    response = http.post(url = url, header = header, body = req_json)
     responsebody = json.loads(response.text)
     authtoken = responsebody["access"]["token"]["id"]
     return authtoken
+
 
 def createmarconiheaders():
     """Returns headers to be used for all Marconi requests"""
@@ -34,6 +34,7 @@ def createmarconiheaders():
 
     return headers
 
+
 def invalidauthtokenheader():
     """Returns a header with invalid auth token"""
     authtoken = "0101BLAHBLAHINVALID"
@@ -45,6 +46,7 @@ def invalidauthtokenheader():
     headers = headers.replace("<USER-AGENT>", USERAGENT)
     return headers
 
+
 def missingheaderfields():
     """Returns a header with missing USERAGENT header"""
     authtoken = getkeystonetoken()
@@ -54,6 +56,7 @@ def missingheaderfields():
     headers = headers.replace("<AuthToken>", authtoken)
     headers = headers.replace("<HOST>", HOST)
     return headers
+
 
 def plaintextinheader():
     """Returns headers to be used for all Marconi requests"""
@@ -67,6 +70,7 @@ def plaintextinheader():
     headers = headers.replace("<USER-AGENT>", USERAGENT)
     return headers
 
+
 def asteriskinheader():
     """Returns headers to be used for all Marconi requests"""
 
@@ -79,6 +83,7 @@ def asteriskinheader():
     headers = headers.replace("<USER-AGENT>", USERAGENT)
     return headers
 
+
 def getheaders(inputheader):
     """Replacing header data to use Marconi /TestCase specific headers"""
     if inputheader:
@@ -89,20 +94,6 @@ def getheaders(inputheader):
         header = createmarconiheaders()
     return header
 
-def getcustomdata(handydict):
-    """Returns custom data as specified in test data"""
-    handydict = json.loads(handydict)
-    customflag = "HANDYFLAG" in handydict.keys()
-    if customflag:
-        functiontocall = handydict["HANDYFLAG"]
-        if ("messagecount" in functiontocall.keys()):
-            customdata = getmessagebody(functiontocall)
-        elif ("metadatasize" in functiontocall.keys()):
-            customdata = getcustombody(functiontocall)
-        return customdata
-    else:
-        return handydict
-
 
 def getcustombody(kwargs):
     """Returns a custom requestbody"""
@@ -111,6 +102,7 @@ def getcustombody(kwargs):
         randomdata = binascii.b2a_hex(os.urandom(kwargs["metadatasize"]))
         reqbody["data"] = randomdata
     return json.dumps(reqbody)
+
 
 def getbody(inputbody):
     """Replacing request data to use Marconi specific body"""
@@ -123,13 +115,16 @@ def getbody(inputbody):
         body = inputbody
     return body
 
+
 def createurlfromappender(appender):
     """Returns url by catenating the base server with the appender
        - appender should have a preceding / """
     nexturl = str(BASE_SERVER + appender)
     return(nexturl)
 
+
 def geturlfromlocation(header):
     location = header["location"]
     url = createurlfromappender(location)
     return url
+

@@ -1,4 +1,8 @@
 import json
+import binascii
+import os
+import common
+
 
 def verifymetadata(getdata, postedbody):
     """@todo - Really verify the metadata"""
@@ -13,6 +17,10 @@ def verifymetadata(getdata, postedbody):
         print("NAYYY")
 
 def verifyqueuestats(*getresponse):
+    """Verifies that
+       1. stats json body has the keys - action & messages
+       2. messages json has the keys - claimed & free
+       3. claimed & free key values are int """
     testresultflag = True
     headers = getresponse[0]
     body = json.loads(getresponse[1])
@@ -22,11 +30,10 @@ def verifyqueuestats(*getresponse):
         stats = body["messages"]
         keysinstats = stats.keys()
         keysinstats.sort()
-        if (keysinstats == ["claimed", "expired", "total"]) :
+        if (keysinstats == ["claimed", "free"]) :
             try:
                 int(stats["claimed"])
-                int(stats["expired"])
-                int(stats["total"])
+                int(stats["free"])
             except:
                 testresultflag = False
         else:
@@ -39,3 +46,13 @@ def verifyqueuestats(*getresponse):
         print headers
         print body
         assert testresultflag, "Get Request stats failed"
+
+def getqueuename(namelength = 513):
+    """Returns a queuename of specified length.
+       By default, a name longer than Marconi allows - currently 512 bytes"""
+    appender = "/queues/" + binascii.b2a_hex(os.urandom(namelength))
+    url = common.commonfunctions.createurlfromappender(appender)
+    return url
+
+def queueteardown():
+    pass

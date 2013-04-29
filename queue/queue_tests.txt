@@ -1,15 +1,18 @@
 | *Setting*      | *Value* 			    		|
 | Documentation  | Marconi - Queue Test Suite	|
-| Library        | httpfnlib.py           	    |
+| Library        | ../common/http.py            |
 | Library        | queuefnlib.py           	    |
-| Library        | commonfunctions.py           |
+| Library        | ../common/commonfunctions.py |
+| Library        | Collections                  |
 | Variables      | getdata.py                   |
 | Force Tags     | QUEUE                        |
+| Suite Teardown | executetests                 | ${API_TEST_DATA[14]}         |
 
 | *Test Case*           | *Action*              | *Argument*                   | *Argument*          |
 | 1: PUT QUEUE          | [DOCUMENTATION]       | Creates, gets & verifies     |                     |
 |                       | ...                   | Queue                        |                     |
-|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[0]} |
+|                       | @{putresponse}=       | executetests                 | ${API_TEST_DATA[0]} |
+|                       | ${url}=               | geturlfromlocation           | ${putresponse[0]}   |
 |                       | ${getresponse}=       | executetests                 | ${API_TEST_DATA[1]} |
 |                       | verifymetadata        | ${API_TEST_DATA[0]["body"]}  | ${getresponse}      |
 | 2: PUT QUEUE          | [DOCUMENTATION]       | Verifies that queue name     |                     |
@@ -26,18 +29,26 @@
 |                       | executetests          | ${API_TEST_DATA[6]}          |                     |
 | 5: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with invalid    |                     |
 |                       | ...                   | Authtoken                    |                     |
+|                       | ${header}=            | invalidauthtokenheader       |                     |
+|                       | Set To Dictionary     | ${API_TEST_DATA[7]} | header | ${header}           | # test Setup -Set the POST header
 |                       | executetests          | ${API_TEST_DATA[7]}          |                     |
 | 6: PUT QUEUE          | [DOCUMENTATION]       | Create Queue with missing    |                     |
 |                       | ...                   | header field USERAGENT       |                     |
+|                       | ${header}=            | missingheaderfields          |                     |
+|                       | Set To Dictionary     | ${API_TEST_DATA[8]} | header | ${header}           | # test Setup -Set the POST header
 |                       | executetests          | ${API_TEST_DATA[8]}          |                     |
 | 7: PUT QUEUE          | [DOCUMENTATION]       | Verifies metadata toplevel   |                     |
 |                       | ...                   | field do not start with _    |                     |
 |                       | executetests          | ${API_TEST_DATA[9]}          |                     |
 | 8: PUT QUEUE          | [DOCUMENTATION]       | Header has Accept value that |                     |
-|                       | ...                   |  is not "application/json"   |                     |
+|                       | ...                   | is not "application/json"    |                     |
+|                       | ${header}=            | plaintextinheader            |                     |
+|                       | Set To Dictionary     | ${API_TEST_DATA[10]} | header | ${header}          | # test Setup -Set the POST header
 |                       | executetests          | ${API_TEST_DATA[10]}         |                     |
 | 9: PUT QUEUE          | [DOCUMENTATION]       | Header has Accept value that |                     |
 |                       | ...                   |  is     "\*/\*"              |                     |
+|                       | ${header}=            | asteriskinheader             |                     |
+|                       | Set To Dictionary     | ${API_TEST_DATA[11]} | header | ${header}          | # test Setup -Set the POST header
 |                       | executetests          | ${API_TEST_DATA[11]}         |                     |
 | 10: PUT QUEUE         | [DOCUMENTATION]       | Create queue with Non ASCII  |                     |
 |                       | ...                   | characters in name           |                     |
@@ -49,17 +60,27 @@
 |                       | executetests          | ${API_TEST_DATA[14]}         |                     |
 | 13: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |                     |
 |                       | ...                   | size = 4KB                   |                     |
+|                       | ${reqdata}=           | Create Dictionary  | metadatasize | ${4096}        |
+|                       | ${body}=              | getcustombody                | ${reqdata}          |
+|                       | Set To Dictionary     | ${API_TEST_DATA[15]} | body  | ${body}             | # test Setup -Set the POST body
 |                       | executetests          | ${API_TEST_DATA[15]}         |                     |
 | 14: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |                     |
 |                       | ...                   | size = 4KB + 1               |                     |
+|                       | ${reqdata}=           | Create Dictionary  | metadatasize | ${4097}        |
+|                       | ${body}=              | getcustombody                | ${reqdata}          |
+|                       | Set To Dictionary     | ${API_TEST_DATA[16]} | body  | ${body}             | # test Setup -Set the POST body
 |                       | executetests          | ${API_TEST_DATA[16]}         |                     |
 | 15: PUT QUEUE         | [DOCUMENTATION]       | Create queue with metadata   |                     |
 |                       | ...                   | size = 4KB - 1               |                     |
+|                       | ${reqdata}=           | Create Dictionary  | metadatasize | ${4095}        |
+|                       | ${body}=              | getcustombody                | ${reqdata}          |
+|                       | Set To Dictionary     | ${API_TEST_DATA[17]} | body  | ${body}             | # test Setup -Set the POST body
 |                       | executetests          | ${API_TEST_DATA[17]}         |                     |
 | 16: PUT QUEUE         | [DOCUMENTATION]       | Create queue with name       |                     |
 |                       | ...                   | longer than 512 bytes        |                     |
+|                       | ${url}=               | getqueuename                 |                     |
+|                       | Set To Dictionary     | ${API_TEST_DATA[18]} | url | ${url}                | # test Setup -Set the PUT url
 |                       | executetests          | ${API_TEST_DATA[18]}         |                     |
 | 17: GET QUEUE STATS   | [DOCUMENTATION]       | Get Queue Stats              |                     |
-|                       | ${putresponse}=       | executetests                 | ${API_TEST_DATA[20]} |
-|                       | @{getresponse}=       | executetests                 | ${API_TEST_DATA[21]} |
+|                       | @{getresponse}=       | executetests                | ${API_TEST_DATA[19]} |
 |                       | verifyqueuestats      | @{getresponse}               |

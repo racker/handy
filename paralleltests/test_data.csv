@@ -1,3 +1,0 @@
-TestID|httpverb|url|header|body|params|expectedRC|expectedResponseBody
-1|PUT     |http://<SERVER>/v1/1/queues/qadd5||{"messages": {"ttl": 86400}}||201|
-2|GET     |http://<SERVER>/v1/1/queues/qadd5||||200|{"ttl": 86400}

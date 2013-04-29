@@ -2,14 +2,7 @@
 import requests
 import json
 
-#OBSOLETE @todo1: change db to use mysql/sqlite instead of SQL server
-#@todo2: Support for non-JSON encoding
-#@todo3:Create override.py for project specific fun.eg. replace regex in
-#      header data from DB with values(replace <AuthToken> with auth token etc.)
-#@todo4 : UI to validate & insert data to DB
-
-
-def httpget(url, header = '', param = ''):
+def get(url, header = '', param = ''):
     """Function to perform http GET"""
     if header:
     #@todo2
@@ -27,7 +20,7 @@ def httpget(url, header = '', param = ''):
     return response
 
 
-def httppost(url, header = '', body = '', param = ''):
+def post(url, header = '', body = '', param = ''):
     """Function to perform http POST"""
     if header:
     #@todo2
@@ -48,7 +41,7 @@ def httppost(url, header = '', body = '', param = ''):
     return response
 
 
-def httpput(url, header = '', body = '', param = ''):
+def put(url, header = '', body = '', param = ''):
     """Function to perform http PUT"""
     response = None
     if header:
@@ -67,7 +60,7 @@ def httpput(url, header = '', body = '', param = ''):
     return response
 
 
-def httpdelete(url, header = '', param = ''):
+def delete(url, header = '', param = ''):
     """Function to perform http DELETE"""
     response = None
     if header:
@@ -85,7 +78,7 @@ def httpdelete(url, header = '', param = ''):
         print("TooManyRedirects: Exception in httpdelete {}".format(detail))
     return response
 
-def httppatch(url, header = '', body = '', param = ''):
+def patch(url, header = '', body = '', param = ''):
     """Function to perform http PATCH"""
     response = None
     if header:
@@ -117,15 +110,15 @@ def executetests(row):
     response = None
 
     if httpverb == 'GET' :
-        response = httpget(url, header, params)
+        response = get(url, header, params)
     elif httpverb == 'POST' :
-        response = httppost(url, header, body, params)
+        response = post(url, header, body, params)
     elif httpverb == 'PUT' :
-        response = httpput(url, header, body, params)
+        response = put(url, header, body, params)
     elif httpverb == 'DELETE' :
-        response = httpdelete(url, header, params)
+        response = delete(url, header, params)
     elif httpverb == 'PATCH' :
-        response = httppatch(url, header, body, params)
+        response = patch(url, header, body, params)
     if response != None:
         testresultflag = verifyresponse(response, expectedRC, expectedresponsebody)
     else:

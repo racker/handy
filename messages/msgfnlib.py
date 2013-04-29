@@ -2,8 +2,8 @@ from __future__ import with_statement
 import random
 import json
 from env import  *
-import httpfnlib
-import commonfunctions
+import http
+import common
 
 validttl = random.randint(60, 1209600)
 negativettl = -validttl
@@ -107,9 +107,9 @@ def verifypostmsg(msgheaders, postedbody):
        Message(s) & validates the message metadata"""
     testresultflag = False
     location = msgheaders['location']
-    url = commonfunctions.createurlfromappender(location)
-    header = commonfunctions.createmarconiheaders()
-    getmsg = httpfnlib.httpget(url, header)
+    url = common.commonfunctions.createurlfromappender(location)
+    header = common.commonfunctions.createmarconiheaders()
+    getmsg = http.get(url, header)
     if getmsg.status_code == 200:
         testresultflag = verifymetadata(getmsg.text, postedbody)
     else:
@@ -126,9 +126,9 @@ def getnextmsgset(responsetext):
     """Follows the href path & GETs the next batch of messages recursively"""
     testresultflag = False
     href = gethref(responsetext)
-    url = commonfunctions.createurlfromappender(href)
-    header = commonfunctions.createmarconiheaders()
-    getmsg = httpfnlib.httpget(url, header)
+    url = common.commonfunctions.createurlfromappender(href)
+    header = common.commonfunctions.createmarconiheaders()
+    getmsg = http.get(url, header)
     if getmsg.status_code == 200:
         return getnextmsgset(getmsg.text)
     elif getmsg.status_code == 204:
@@ -157,7 +157,7 @@ def verifygetmsgs(count, *getresponse):
 
 def verifydelete(url, header):
     testresultflag = False
-    getmsg = httpfnlib.httpget(url, header)
+    getmsg = http.get(url, header)
     if getmsg.status_code == 404:
         testresultflag = True
     else:
@@ -178,9 +178,9 @@ def deletemsg(*postresponse):
     headers = headers.replace("'",'"')
     headers = json.loads(headers)
     location = headers['location']
-    url = commonfunctions.createurlfromappender(location)
-    header = commonfunctions.createmarconiheaders()
-    deletemsg = httpfnlib.httpdelete(url, header)
+    url = common.commonfunctions.createurlfromappender(location)
+    header = common.commonfunctions.createmarconiheaders()
+    deletemsg = http.delete(url, header)
     if deletemsg.status_code == 204 :
         testresultflag = verifydelete(url,header)
     else:

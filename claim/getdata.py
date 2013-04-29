@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
-from commonfunctions import *
+import common
 
 def get_data():
     """Gets Test Data from a csv file"""
@@ -11,9 +11,9 @@ def get_data():
             DATA.append(row)
     # Replace the for loop below to implement project specific logic
     for row in DATA:
-        row['header']  = getheaders(row['header'])
-        row['body']  = json.dumps(getbody(row['body']))
-        row['url'] = row['url'].replace("<BASE_URL>",BASE_URL)
+        row['header']  = common.commonfunctions.getheaders(row['header'])
+        #row['body']  = json.dumps(getbody(row['body']))
+        row['url'] = row['url'].replace("<BASE_URL>",common.env.BASE_URL)
     return DATA
 
 API_TEST_DATA = get_data()

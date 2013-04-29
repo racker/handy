@@ -1,14 +1,13 @@
 #from messages import msgfnlib
 import json
-import httpfnlib
-import commonfunctions
-from env import *
+import http
+import common
 
 def initializetestsuite(msgcount):
     pass
 
 def createurlfromlocn(location):
-    url = str(BASE_SERVER + location)
+    url = str(common.env.BASE_SERVER + location)
     return(url)
 
 def verifyclaimmsg(count, *postresponse):
@@ -41,8 +40,8 @@ def queryclaim(headers, *body):
     msglist = json.loads(msglist)
     location = headers["Location"]
     url = createurlfromlocn(location)
-    header = commonfunctions.createmarconiheaders()
-    getmsg = httpfnlib.httpget(url,header)
+    header = common.commonfunctions.createmarconiheaders()
+    getmsg = http.get(url,header)
     if getmsg.status_code == 200:
         querybody = json.loads(getmsg.text)
         querymsgs = querybody["messages"]
@@ -82,12 +81,12 @@ def patchclaim(*postresponse):
     body = postresponse[1]
     location = headers["Location"]
     url = createurlfromlocn(location)
-    header = commonfunctions.createmarconiheaders()
+    header = common.commonfunctions.createmarconiheaders()
     ttlvalue = 300
     payload = '{ "ttl": ttlvalue }'
     payload = payload.replace("ttlvalue", str(ttlvalue))
     print payload
-    patchresponse = httpfnlib.httppatch(url, header, body = payload)
+    patchresponse = http.patch(url, header, body = payload)
     if patchresponse.status_code == 204 :
         testresultflag = verifypatchclaim(url, header, ttlvalue)
     else:
@@ -101,7 +100,7 @@ def patchclaim(*postresponse):
 
 def verifypatchclaim(url, header, ttlvalue):
     testresultflag = True
-    queryclaim = httpfnlib.httpget(url,header)
+    queryclaim = http.get(url,header)
     responsebody = json.loads(queryclaim.text)
     ttl = responsebody["ttl"]
     if ttl < ttlvalue:
@@ -119,12 +118,12 @@ def createurllistfromhref(*postresponse):
 def deleteclaimedmsgs(*postresponse):
     testresultflag = False
     urllist = createurllistfromhref(*postresponse)
-    header = commonfunctions.createmarconiheaders()
+    header = common.commonfunctions.createmarconiheaders()
     for url in urllist:
-        deletersp = httpfnlib.httpdelete(url,header)
+        deletersp = http.delete(url,header)
         if deletersp.status_code == 204:
             print url
-            getdeleted = httpfnlib.httpget(url,header)
+            getdeleted = http.get(url,header)
             if getdeleted.status_code == 404:
                 testresultflag = True
             else:

@@ -1,7 +1,7 @@
 | *Setting*      | *Value* 			    		|
 | Documentation  | Marconi - Queue Test Suite	|
-| Library        | httpfnlib.py           	    |
-| Library        | commonfunctions.py           |
+| Library        | ../common/http.py            |
+| Library        | ../common/commonfunctions.py |
 | Library        | claimfnlib.py                |
 | Variables      | getdata.py                   |
 | Force Tags     | CLAIM                        |
