@@ -16,4 +16,4 @@ TENANT_ID = parser.get("marconi_env", "tenant_id")
 BASE_URL = BASE_SERVER + "/" + MARCONI_VERSION + "/" + TENANT_ID
 
 HOST = parser.get("header_values", "host")
-USERAGENT = parser.get("header_values", "useragent")
+USER_AGENT = parser.get("header_values", "useragent")

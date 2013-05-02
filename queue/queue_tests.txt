@@ -2,7 +2,7 @@
 | Documentation  | Marconi - Queue Test Suite	|
 | Library        | ../common/http.py            |
 | Library        | queuefnlib.py           	    |
-| Library        | ../common/commonfunctions.py |
+| Library        | ../common/functionlib.py |
 | Library        | Collections                  |
 | Variables      | getdata.py                   |
 | Force Tags     | QUEUE                        |
